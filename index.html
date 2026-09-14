@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LifeCraft — Yaşam Mimarın</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-orb orb-1"></div>
+<div class="bg-orb orb-2"></div>
+<div class="bg-orb orb-3"></div>
+
+<main class="app">
+
+  <!-- ekran: karşılama -->
+  <section class="screen active" id="screen-welcome">
+    <div class="card welcome-card">
+      <span class="logo-badge">✦ LifeCraft</span>
+      <h1>Kişisel Yaşam<br>Mimarın</h1>
+      <p class="lead">
+        Merhaba! Ben senin yaşam mimarınım. Kendi potansiyelini en üst düzeye
+        çıkaracağın, sana en uygun yaşam tarzını birlikte tasarlayalım.
+      </p>
+      <p class="sub">Sadece 10 kısa soru — 2 dakikadan az sürer.</p>
+      <button class="btn btn-primary" id="btn-start">Başlayalım <span class="arrow">→</span></button>
+    </div>
+  </section>
+
+  <!-- ekran: sorular -->
+  <section class="screen" id="screen-quiz">
+    <div class="card quiz-card">
+      <div class="progress-wrap">
+        <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+        <span class="progress-label" id="progress-label">Soru 1 / 10</span>
+      </div>
+
+      <div class="questions" id="questions"></div>
+
+      <div class="quiz-nav">
+        <button class="btn btn-ghost" id="btn-back">← Geri</button>
+        <button class="btn btn-primary" id="btn-next" disabled>Devam Et <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ekran: yükleniyor -->
+  <section class="screen" id="screen-loading">
+    <div class="card loading-card">
+      <div class="spinner"></div>
+      <p id="loading-text">Yaşam tarzın tasarlanıyor…</p>
+    </div>
+  </section>
+
+  <!-- ekran: sonuç -->
+  <section class="screen" id="screen-result">
+    <div class="result-wrap">
+
+      <div class="card result-hero">
+        <span class="result-eyebrow">Senin için tasarlanan yaşam tarzı</span>
+        <div class="result-emoji" id="result-emoji">✦</div>
+        <h2 id="result-name">—</h2>
+        <p class="result-tagline" id="result-tagline"></p>
+        <p class="result-why" id="result-why"></p>
+      </div>
+
+      <div class="card result-routine">
+        <h3>Günlük Rutinin</h3>
+        <div class="routine-grid" id="routine-grid"></div>
+      </div>
+
+      <div class="card result-models">
+        <h3>Bu Yolu Senden Önce Yürüyenler</h3>
+        <div class="models-grid" id="models-grid"></div>
+      </div>
+
+      <button class="btn btn-ghost restart-btn" id="btn-restart">↺ Baştan Başla</button>
+    </div>
+  </section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
