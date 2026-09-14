@@ -4,8 +4,6 @@
 
 **Your personal life architect.** Gets to know you in 10 questions and designs a personalized lifestyle, daily routine, and inspiring role models — just for you.
 
-🔗 **Canlı Demo / Live Demo:** [netlify-linkini-buraya-ekle](https://your-site.netlify.app)
-
 ---
 
 ## 📖 Hakkında / About
