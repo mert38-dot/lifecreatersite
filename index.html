@@ -6,7 +6,7 @@
 <title>LifeCraft — Yaşam Mimarın</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,18 +15,23 @@
 <div class="bg-orb orb-2"></div>
 <div class="bg-orb orb-3"></div>
 
+<div class="lang-toggle" id="lang-toggle">
+  <button type="button" class="lang-btn active" data-lang="tr">TR</button>
+  <button type="button" class="lang-btn" data-lang="en">EN</button>
+</div>
+
 <main class="app">
 
   <!-- ekran: karşılama -->
   <section class="screen active" id="screen-welcome">
     <div class="card welcome-card">
       <span class="logo-badge">✦ LifeCraft</span>
-      <h1>Kişisel Yaşam<br>Mimarın</h1>
-      <p class="lead">
+      <h1 id="welcome-title" class="gradient-text">Kişisel Yaşam<br>Mimarın</h1>
+      <p class="lead" id="lead-text">
         Merhaba! Ben senin yaşam mimarınım. Kendi potansiyelini en üst düzeye
         çıkaracağın, sana en uygun yaşam tarzını birlikte tasarlayalım.
       </p>
-      <p class="sub">Sadece 10 kısa soru — 2 dakikadan az sürer.</p>
+      <p class="sub" id="sub-text">Sadece 10 kısa soru — 2 dakikadan az sürer.</p>
       <button class="btn btn-primary" id="btn-start">Başlayalım <span class="arrow">→</span></button>
     </div>
   </section>
@@ -61,20 +66,20 @@
     <div class="result-wrap">
 
       <div class="card result-hero">
-        <span class="result-eyebrow">Senin için tasarlanan yaşam tarzı</span>
+        <span class="result-eyebrow" id="result-eyebrow">Senin için tasarlanan yaşam tarzı</span>
         <div class="result-emoji" id="result-emoji">✦</div>
-        <h2 id="result-name">—</h2>
+        <h2 id="result-name" class="gradient-text">—</h2>
         <p class="result-tagline" id="result-tagline"></p>
         <p class="result-why" id="result-why"></p>
       </div>
 
       <div class="card result-routine">
-        <h3>Günlük Rutinin</h3>
+        <h3 id="routine-title">Günlük Rutinin</h3>
         <div class="routine-grid" id="routine-grid"></div>
       </div>
 
       <div class="card result-models">
-        <h3>Bu Yolu Senden Önce Yürüyenler</h3>
+        <h3 id="models-title">Bu Yolu Senden Önce Yürüyenler</h3>
         <div class="models-grid" id="models-grid"></div>
       </div>
 

@@ -1,104 +1,157 @@
+/* ---------- dil metinleri ---------- */
+
+const STRINGS = {
+  tr: {
+    welcomeTitle: 'Kişisel Yaşam<br>Mimarın',
+    lead: 'Merhaba! Ben senin yaşam mimarınım. Kendi potansiyelini en üst düzeye çıkaracağın, sana en uygun yaşam tarzını birlikte tasarlayalım.',
+    sub: 'Sadece 10 kısa soru — 2 dakikadan az sürer.',
+    start: 'Başlayalım',
+    back: 'Geri',
+    next: 'Devam Et',
+    seeResult: 'Sonucumu Gör',
+    soru: 'Soru',
+    loadingMessages: [
+      'Cevapların analiz ediliyor…',
+      'Enerji ritmin okunuyor…',
+      'Sana en yakın yaşam tarzı belirleniyor…',
+      'Rutinin şekilleniyor…',
+    ],
+    resultEyebrow: 'Senin için tasarlanan yaşam tarzı',
+    routineTitle: 'Günlük Rutinin',
+    modelsTitle: 'Bu Yolu Senden Önce Yürüyenler',
+    restart: 'Baştan Başla',
+    periods: { sabah: 'Sabah', ogle: 'Öğle', aksam: 'Akşam' },
+  },
+  en: {
+    welcomeTitle: 'Your Personal<br>Life Architect',
+    lead: 'Hi! I’m your life architect. Let’s design the lifestyle that fits you best and unlocks your full potential.',
+    sub: 'Just 10 short questions — takes less than 2 minutes.',
+    start: 'Get Started',
+    back: 'Back',
+    next: 'Continue',
+    seeResult: 'See My Result',
+    soru: 'Question',
+    loadingMessages: [
+      'Analyzing your answers…',
+      'Reading your energy rhythm…',
+      'Finding your closest lifestyle…',
+      'Shaping your routine…',
+    ],
+    resultEyebrow: 'The lifestyle designed for you',
+    routineTitle: 'Your Daily Routine',
+    modelsTitle: 'Those Who Walked This Path Before You',
+    restart: 'Start Over',
+    periods: { sabah: 'Morning', ogle: 'Midday', aksam: 'Evening' },
+  },
+};
+
+let LANG = 'tr';
+try {
+  const savedLang = localStorage.getItem('lifecraft-lang');
+  if (savedLang === 'tr' || savedLang === 'en') LANG = savedLang;
+} catch (e) { /* localStorage unavailable */ }
+
 /* ---------- veri: sorular ---------- */
 
 const QUESTIONS = [
   {
     key: 'priority',
-    title: 'Hayattaki en büyük önceliğin nedir?',
+    title: { tr: 'Hayattaki en büyük önceliğin nedir?', en: 'What matters most to you in life?' },
     options: [
-      { value: 'basari',      emoji: '🚀', label: 'Başarı — hedeflere ulaşmak, ilerlemek' },
-      { value: 'huzur',       emoji: '🕊️', label: 'Huzur — sakinlik, iç denge' },
-      { value: 'macera',      emoji: '🧭', label: 'Macera — yeni deneyimler, keşif' },
-      { value: 'saglik',      emoji: '💪', label: 'Sağlık — beden ve zihin bakımı' },
+      { value: 'basari', emoji: '🚀', label: { tr: 'Başarı — hedeflere ulaşmak, ilerlemek', en: 'Achievement — reaching goals, moving forward' } },
+      { value: 'huzur',  emoji: '🕊️', label: { tr: 'Huzur — sakinlik, iç denge', en: 'Peace — calm, inner balance' } },
+      { value: 'macera', emoji: '🧭', label: { tr: 'Macera — yeni deneyimler, keşif', en: 'Adventure — new experiences, discovery' } },
+      { value: 'saglik', emoji: '💪', label: { tr: 'Sağlık — beden ve zihin bakımı', en: 'Health — caring for body and mind' } },
     ],
   },
   {
     key: 'energy',
-    title: 'Günün hangi saatlerinde en enerjik hissediyorsun?',
+    title: { tr: 'Günün hangi saatlerinde en enerjik hissediyorsun?', en: 'When during the day do you feel most energetic?' },
     options: [
-      { value: 'sabah',  emoji: '🌅', label: 'Sabah erken (05:00 – 09:00)' },
-      { value: 'oglen',  emoji: '☀️', label: 'Gün ortası (09:00 – 14:00)' },
-      { value: 'aksam',  emoji: '🌇', label: 'Öğleden sonra / akşamüstü' },
-      { value: 'gece',   emoji: '🌙', label: 'Gece geç saatler' },
+      { value: 'sabah', emoji: '🌅', label: { tr: 'Sabah erken (05:00 – 09:00)', en: 'Early morning (5–9 AM)' } },
+      { value: 'oglen', emoji: '☀️', label: { tr: 'Gün ortası (09:00 – 14:00)', en: 'Midday (9 AM–2 PM)' } },
+      { value: 'aksam', emoji: '🌇', label: { tr: 'Öğleden sonra / akşamüstü', en: 'Afternoon / early evening' } },
+      { value: 'gece',  emoji: '🌙', label: { tr: 'Gece geç saatler', en: 'Late at night' } },
     ],
   },
   {
     key: 'stress',
-    title: 'Seni en çok ne yorar veya strese sokar?',
+    title: { tr: 'Seni en çok ne yorar veya strese sokar?', en: 'What drains or stresses you the most?' },
     options: [
-      { value: 'kalabalik',    emoji: '🌀', label: 'Kalabalık, sosyal yoğunluk' },
-      { value: 'duzensizlik',  emoji: '📦', label: 'Düzensizlik, kaos' },
-      { value: 'zaman',        emoji: '⏱️', label: 'Zaman baskısı, son teslim tarihleri' },
-      { value: 'monotonluk',   emoji: '🔁', label: 'Monotonluk, sıkılmak' },
-      { value: 'fiziksel',     emoji: '🔋', label: 'Fiziksel yorgunluk, uykusuzluk' },
+      { value: 'kalabalik',   emoji: '🌀', label: { tr: 'Kalabalık, sosyal yoğunluk', en: 'Crowds, social overload' } },
+      { value: 'duzensizlik', emoji: '📦', label: { tr: 'Düzensizlik, kaos', en: 'Disorder, chaos' } },
+      { value: 'zaman',       emoji: '⏱️', label: { tr: 'Zaman baskısı, son teslim tarihleri', en: 'Time pressure, deadlines' } },
+      { value: 'monotonluk',  emoji: '🔁', label: { tr: 'Monotonluk, sıkılmak', en: 'Monotony, boredom' } },
+      { value: 'fiziksel',    emoji: '🔋', label: { tr: 'Fiziksel yorgunluk, uykusuzluk', en: 'Physical fatigue, lack of sleep' } },
     ],
   },
   {
     key: 'freetime',
-    title: 'Boş vaktinde üretmeyi mi, tüketmeyi mi, yoksa hareket etmeyi mi seversin?',
+    title: { tr: 'Boş vaktinde üretmeyi mi, tüketmeyi mi, yoksa hareket etmeyi mi seversin?', en: 'In your free time, do you prefer creating, consuming, or moving?' },
     options: [
-      { value: 'uretmek',  emoji: '🎨', label: 'Üretmek — yazmak, yaratmak, öğrenmek' },
-      { value: 'tuketmek', emoji: '🛋️', label: 'Tüketmek — dinlenmek, izlemek, okumak' },
-      { value: 'hareket',  emoji: '🏃', label: 'Hareket etmek — spor, dışarı çıkmak' },
+      { value: 'uretmek',  emoji: '🎨', label: { tr: 'Üretmek — yazmak, yaratmak, öğrenmek', en: 'Creating — writing, making, learning' } },
+      { value: 'tuketmek', emoji: '🛋️', label: { tr: 'Tüketmek — dinlenmek, izlemek, okumak', en: 'Consuming — resting, watching, reading' } },
+      { value: 'hareket',  emoji: '🏃', label: { tr: 'Hareket etmek — spor, dışarı çıkmak', en: 'Moving — sports, getting outside' } },
     ],
   },
   {
     key: 'workstyle',
-    title: 'Çalışma tarzın nasıl?',
+    title: { tr: 'Çalışma tarzın nasıl?', en: 'What’s your working style?' },
     options: [
-      { value: 'planli',     emoji: '📋', label: 'Planlı ve düzenli — listeler, takvimler' },
-      { value: 'esnek',      emoji: '🌊', label: 'Esnek ve spontane — akışına göre' },
-      { value: 'sprint',     emoji: '⚡', label: 'Yoğun sprintler + dinlenme molaları' },
-      { value: 'istikrarli', emoji: '🪨', label: 'Sakin ve istikrarlı, hep aynı tempo' },
+      { value: 'planli',     emoji: '📋', label: { tr: 'Planlı ve düzenli — listeler, takvimler', en: 'Planned and organized — lists, calendars' } },
+      { value: 'esnek',      emoji: '🌊', label: { tr: 'Esnek ve spontane — akışına göre', en: 'Flexible and spontaneous — going with the flow' } },
+      { value: 'sprint',     emoji: '⚡', label: { tr: 'Yoğun sprintler + dinlenme molaları', en: 'Intense sprints + rest breaks' } },
+      { value: 'istikrarli', emoji: '🪨', label: { tr: 'Sakin ve istikrarlı, hep aynı tempo', en: 'Calm and steady, same pace always' } },
     ],
   },
   {
     key: 'social',
-    title: 'Sosyal ortamda mı, yoksa yalnızken mi daha üretkensin?',
+    title: { tr: 'Sosyal ortamda mı, yoksa yalnızken mi daha üretkensin?', en: 'Are you more productive around others, or alone?' },
     options: [
-      { value: 'yalniz',    emoji: '🚪', label: 'Tamamen yalnızken' },
-      { value: 'kucuk',     emoji: '👥', label: 'Küçük, samimi gruplarda' },
-      { value: 'kalabalik', emoji: '🎉', label: 'Kalabalık, enerjik ortamlarda' },
-      { value: 'degisken',  emoji: '🔄', label: 'Değişken, duruma göre' },
+      { value: 'yalniz',    emoji: '🚪', label: { tr: 'Tamamen yalnızken', en: 'Completely alone' } },
+      { value: 'kucuk',     emoji: '👥', label: { tr: 'Küçük, samimi gruplarda', en: 'In small, close-knit groups' } },
+      { value: 'kalabalik', emoji: '🎉', label: { tr: 'Kalabalık, enerjik ortamlarda', en: 'In crowded, high-energy settings' } },
+      { value: 'degisken',  emoji: '🔄', label: { tr: 'Değişken, duruma göre', en: 'It varies, depending on the situation' } },
     ],
   },
   {
     key: 'motivation',
-    title: 'Seni en çok ne motive eder?',
+    title: { tr: 'Seni en çok ne motive eder?', en: 'What motivates you the most?' },
     options: [
-      { value: 'rekabet', emoji: '🏆', label: 'Rekabet ve başarı' },
-      { value: 'anlam',   emoji: '🌱', label: 'İç huzur ve anlam' },
-      { value: 'yenilik', emoji: '💡', label: 'Yenilik ve keşif' },
-      { value: 'katki',   emoji: '🤝', label: 'Başkalarına katkı sağlamak' },
+      { value: 'rekabet', emoji: '🏆', label: { tr: 'Rekabet ve başarı', en: 'Competition and achievement' } },
+      { value: 'anlam',   emoji: '🌱', label: { tr: 'İç huzur ve anlam', en: 'Inner peace and meaning' } },
+      { value: 'yenilik', emoji: '💡', label: { tr: 'Yenilik ve keşif', en: 'Novelty and discovery' } },
+      { value: 'katki',   emoji: '🤝', label: { tr: 'Başkalarına katkı sağlamak', en: 'Contributing to others' } },
     ],
   },
   {
     key: 'sleep',
-    title: 'Uyku düzenin nasıl?',
+    title: { tr: 'Uyku düzenin nasıl?', en: 'What’s your sleep pattern like?' },
     options: [
-      { value: 'erken',    emoji: '🌅', label: 'Erken yatar, erken kalkarım' },
-      { value: 'gec',      emoji: '🌙', label: 'Geç yatar, geç kalkarım' },
-      { value: 'duzensiz', emoji: '🌀', label: 'Düzensiz, güne göre değişir' },
-      { value: 'kaliteli', emoji: '⏳', label: 'Kısa ama kaliteli uyurum' },
+      { value: 'erken',    emoji: '🌅', label: { tr: 'Erken yatar, erken kalkarım', en: 'Early to bed, early to rise' } },
+      { value: 'gec',      emoji: '🌙', label: { tr: 'Geç yatar, geç kalkarım', en: 'Late to bed, late to rise' } },
+      { value: 'duzensiz', emoji: '🌀', label: { tr: 'Düzensiz, güne göre değişir', en: 'Irregular, it depends on the day' } },
+      { value: 'kaliteli', emoji: '⏳', label: { tr: 'Kısa ama kaliteli uyurum', en: 'Short but high-quality sleep' } },
     ],
   },
   {
     key: 'decision',
-    title: 'Karar verirken en çok neye güvenirsin?',
+    title: { tr: 'Karar verirken en çok neye güvenirsin?', en: 'What do you trust most when making decisions?' },
     options: [
-      { value: 'mantik',    emoji: '🧮', label: 'Mantık ve veri' },
-      { value: 'sezgi',     emoji: '✨', label: 'Sezgi ve iç ses' },
-      { value: 'deneyim',   emoji: '📚', label: 'Geçmiş deneyim ve alışkanlık' },
-      { value: 'baskalari', emoji: '🗣️', label: 'Güvendiğim kişilerin fikri' },
+      { value: 'mantik',    emoji: '🧮', label: { tr: 'Mantık ve veri', en: 'Logic and data' } },
+      { value: 'sezgi',     emoji: '✨', label: { tr: 'Sezgi ve iç ses', en: 'Intuition and gut feeling' } },
+      { value: 'deneyim',   emoji: '📚', label: { tr: 'Geçmiş deneyim ve alışkanlık', en: 'Past experience and habit' } },
+      { value: 'baskalari', emoji: '🗣️', label: { tr: 'Güvendiğim kişilerin fikri', en: 'The opinion of people I trust' } },
     ],
   },
   {
     key: 'idealday',
-    title: 'İdeal bir günün nasıl geçer?',
+    title: { tr: 'İdeal bir günün nasıl geçer?', en: 'What does your ideal day look like?' },
     options: [
-      { value: 'yogun',   emoji: '🔥', label: 'Yoğun ve üretken, dolu dolu' },
-      { value: 'sakin',   emoji: '🍃', label: 'Sakin, amaçsız, akışına bırakılmış' },
-      { value: 'maceral', emoji: '🗺️', label: 'Maceralı, öngörülemez' },
-      { value: 'dengeli', emoji: '⚖️', label: 'Dengeli, rutin ama tatmin edici' },
+      { value: 'yogun',   emoji: '🔥', label: { tr: 'Yoğun ve üretken, dolu dolu', en: 'Busy and productive, packed full' } },
+      { value: 'sakin',   emoji: '🍃', label: { tr: 'Sakin, amaçsız, akışına bırakılmış', en: 'Calm, aimless, going with the flow' } },
+      { value: 'maceral', emoji: '🗺️', label: { tr: 'Maceralı, öngörülemez', en: 'Adventurous, unpredictable' } },
+      { value: 'dengeli', emoji: '⚖️', label: { tr: 'Dengeli, rutin ama tatmin edici', en: 'Balanced, routine but fulfilling' } },
     ],
   },
 ];
@@ -108,154 +161,250 @@ const QUESTIONS = [
 const ARCHETYPES = [
   {
     id: 'zen',
-    name: 'Zen Üretkenliği',
+    name: { tr: 'Zen Üretkenliği', en: 'Zen Productivity' },
     emoji: '🧘',
-    tagline: 'Sakin bir zihin, keskin bir odak.',
+    tagline: { tr: 'Sakin bir zihin, keskin bir odak.', en: 'A calm mind, a sharp focus.' },
     match: { priority: ['huzur', 'saglik'], energy: ['sabah', 'oglen'], stress: ['zaman', 'duzensizlik'], freetime: ['uretmek'],
       workstyle: ['istikrarli', 'planli'], social: ['yalniz', 'kucuk'], motivation: ['anlam'], sleep: ['erken', 'kaliteli'], decision: ['sezgi', 'mantik'], idealday: ['sakin', 'dengeli'] },
-    why: 'Huzuru önceliklendiriyor, gün ışığında en verimli haline geçiyor ve kaostan uzak durduğunda üretkenliğin katlanıyor. Bu sana sakinlikten güç alan, dağınıklığa yer bırakmayan bir ritim kazandırır.',
+    why: {
+      tr: 'Huzuru önceliklendiriyor, gün ışığında en verimli haline geçiyor ve kaostan uzak durduğunda üretkenliğin katlanıyor. Bu sana sakinlikten güç alan, dağınıklığa yer bırakmayan bir ritim kazandırır.',
+      en: 'You prioritize peace, hit your stride in daylight hours, and your output multiplies when you stay clear of chaos. This gives you a rhythm that draws strength from calm and leaves no room for clutter.',
+    },
     routine: {
-      Sabah: ['10 dakikalık sessiz nefes/meditasyon ile güne başla', 'Telefona bakmadan önce günün en önemli 1 işini belirle', 'Hafif bir kahvaltı ve doğal ışıkta birkaç dakika'],
-      Öğle: ['En zor işini enerjinin tepe noktasında (öğlene kadar) bitir', '25-30 dakikalık odak blokları + kısa molalar', 'Öğle arasında ekransız, sessiz bir yürüyüş'],
-      Akşam: ['Gün sonunda 3 satırlık minnettarlık notu', 'Ekranları erken kapat, kitap veya sessiz müzik', 'Sabit bir uyku saatiyle günü kapat'],
+      sabah: {
+        tr: ['10 dakikalık sessiz nefes/meditasyon ile güne başla', 'Telefona bakmadan önce günün en önemli 1 işini belirle', 'Hafif bir kahvaltı ve doğal ışıkta birkaç dakika'],
+        en: ['Start the day with 10 minutes of quiet breathing or meditation', 'Decide today’s single most important task before checking your phone', 'A light breakfast and a few minutes in natural light'],
+      },
+      ogle: {
+        tr: ['En zor işini enerjinin tepe noktasında (öğlene kadar) bitir', '25-30 dakikalık odak blokları + kısa molalar', 'Öğle arasında ekransız, sessiz bir yürüyüş'],
+        en: ['Finish your hardest task while your energy is at its peak (before noon)', '25–30 minute focus blocks with short breaks', 'A quiet, screen-free walk during your lunch break'],
+      },
+      aksam: {
+        tr: ['Gün sonunda 3 satırlık minnettarlık notu', 'Ekranları erken kapat, kitap veya sessiz müzik', 'Sabit bir uyku saatiyle günü kapat'],
+        en: ['A 3-line gratitude note at the end of the day', 'Switch off screens early — a book or quiet music instead', 'Close the day with a consistent bedtime'],
+      },
     },
     models: [
-      { name: 'Steve Jobs', role: 'Apple kurucu ortağı', detail: 'Zen Budizm ve meditasyon pratiğini yıllarca sürdürdü; sadeliği hem yaşamına hem ürün tasarımına taşıdı.' },
-      { name: 'Arianna Huffington', role: 'Girişimci, yazar', detail: 'Dinlenmenin ve uykunun üretkenlikle çelişmediğini, aksine onu beslediğini savunarak Thrive Global\'i kurdu.' },
-      { name: 'Yuval Noah Harari', role: 'Tarihçi, yazar', detail: 'Günlük meditasyon pratiğinin en yoğun yazım dönemlerinde bile net düşünmesini sağladığını sıkça anlatır.' },
+      { name: { tr: 'Steve Jobs', en: 'Steve Jobs' }, role: { tr: 'Apple kurucu ortağı', en: 'Apple co-founder' }, detail: { tr: 'Zen Budizm ve meditasyon pratiğini yıllarca sürdürdü; sadeliği hem yaşamına hem ürün tasarımına taşıdı.', en: 'He kept up a Zen Buddhist meditation practice for years, carrying that simplicity into both his life and his product design.' } },
+      { name: { tr: 'Arianna Huffington', en: 'Arianna Huffington' }, role: { tr: 'Girişimci, yazar', en: 'Entrepreneur, author' }, detail: { tr: 'Dinlenmenin ve uykunun üretkenlikle çelişmediğini, aksine onu beslediğini savunarak Thrive Global’i kurdu.', en: 'She founded Thrive Global on the belief that rest and sleep don’t compete with productivity — they fuel it.' } },
+      { name: { tr: 'Yuval Noah Harari', en: 'Yuval Noah Harari' }, role: { tr: 'Tarihçi, yazar', en: 'Historian, author' }, detail: { tr: 'Günlük meditasyon pratiğinin en yoğun yazım dönemlerinde bile net düşünmesini sağladığını sıkça anlatır.', en: 'He often says his daily meditation practice keeps his thinking clear even during his most intense writing periods.' } },
     ],
   },
   {
     id: 'gecekusu',
-    name: 'Dinamik Gecekuşu',
+    name: { tr: 'Dinamik Gecekuşu', en: 'Dynamic Night Owl' },
     emoji: '🌙',
-    tagline: 'Şehir uyurken, sen inşa ediyorsun.',
+    tagline: { tr: 'Şehir uyurken, sen inşa ediyorsun.', en: 'While the city sleeps, you build.' },
     match: { priority: ['basari', 'macera'], energy: ['gece'], stress: ['monotonluk'], freetime: ['uretmek', 'hareket'],
       workstyle: ['sprint', 'esnek'], social: ['degisken', 'yalniz'], motivation: ['yenilik', 'rekabet'], sleep: ['gec'], decision: ['sezgi'], idealday: ['yogun', 'maceral'] },
-    why: 'Enerjin gece saatlerinde zirve yapıyor ve monotonluktan sıkılıyorsun. Günü klasik bir sabah rutinine sıkıştırmak yerine, kendi doğal ritmine göre kurulmuş yoğun ve yaratıcı bir akış seni çok daha ileri taşır.',
+    why: {
+      tr: 'Enerjin gece saatlerinde zirve yapıyor ve monotonluktan sıkılıyorsun. Günü klasik bir sabah rutinine sıkıştırmak yerine, kendi doğal ritmine göre kurulmuş yoğun ve yaratıcı bir akış seni çok daha ileri taşır.',
+      en: 'Your energy peaks at night and monotony wears you down fast. Instead of squeezing your day into a conventional morning routine, an intense, creative flow built around your own natural rhythm takes you much further.',
+    },
     routine: {
-      Sabah: ['Alarm yok — vücudun uyandığında kalk', 'Hafif, hızlı bir kahvaltı ile güne yumuşak giriş', 'Gündelik işleri ve iletişimi öğleye kadar topla'],
-      Öğle: ['Toplantılar ve rutin işler için ayrılmış blok', 'Kısa bir güç uykusu (power nap) enerji rezervini tazeler', 'Ertesi gecenin planını netleştir'],
-      Akşam: ['Şehir sakinleşirken derin odak seansı başlasın', 'En yaratıcı / en zor işini gece saatlerine sakla', 'Ekranı kapatmadan önce kısa bir soğuma molası ver'],
+      sabah: {
+        tr: ['Alarm yok — vücudun uyandığında kalk', 'Hafif, hızlı bir kahvaltı ile güne yumuşak giriş', 'Gündelik işleri ve iletişimi öğleye kadar topla'],
+        en: ['No alarm — get up when your body wakes up', 'Ease into the day with a light, quick breakfast', 'Batch errands and communication before noon'],
+      },
+      ogle: {
+        tr: ['Toplantılar ve rutin işler için ayrılmış blok', 'Kısa bir güç uykusu (power nap) enerji rezervini tazeler', 'Ertesi gecenin planını netleştir'],
+        en: ['A dedicated block for meetings and routine tasks', 'A short power nap tops up your energy reserves', 'Map out the plan for tonight’s session'],
+      },
+      aksam: {
+        tr: ['Şehir sakinleşirken derin odak seansı başlasın', 'En yaratıcı / en zor işini gece saatlerine sakla', 'Ekranı kapatmadan önce kısa bir soğuma molası ver'],
+        en: ['Start a deep-focus session as the city quiets down', 'Save your most creative or hardest work for the night', 'Give yourself a short wind-down before switching off screens'],
+      },
     },
     models: [
-      { name: 'Winston Churchill', role: 'Devlet adamı, yazar', detail: 'Gece yarısından sonra saatlerce çalışır, en önemli kararlarını ve yazılarını bu saatlerde şekillendirirdi.' },
-      { name: 'Elon Musk', role: 'Girişimci', detail: 'Yoğun proje dönemlerinde çalışmasını gece saatlerine kadar uzattığını defalarca paylaştı.' },
-      { name: 'Marissa Mayer', role: 'Eski Yahoo CEO\'su', detail: 'Kariyerinin başında en yaratıcı işlerini gece geç saatlerde yaptığını anlatmasıyla tanınır.' },
+      { name: { tr: 'Winston Churchill', en: 'Winston Churchill' }, role: { tr: 'Devlet adamı, yazar', en: 'Statesman, writer' }, detail: { tr: 'Gece yarısından sonra saatlerce çalışır, en önemli kararlarını ve yazılarını bu saatlerde şekillendirirdi.', en: 'He worked for hours past midnight, shaping his most important decisions and writing during those late hours.' } },
+      { name: { tr: 'Elon Musk', en: 'Elon Musk' }, role: { tr: 'Girişimci', en: 'Entrepreneur' }, detail: { tr: 'Yoğun proje dönemlerinde çalışmasını gece saatlerine kadar uzattığını defalarca paylaştı.', en: 'He has repeatedly described stretching his work deep into the night during intense project periods.' } },
+      { name: { tr: 'Marissa Mayer', en: 'Marissa Mayer' }, role: { tr: 'Eski Yahoo CEO’su', en: 'Former Yahoo CEO' }, detail: { tr: 'Kariyerinin başında en yaratıcı işlerini gece geç saatlerde yaptığını anlatmasıyla tanınır.', en: 'She’s known for saying that early in her career, she did her most creative work late at night.' } },
     ],
   },
   {
     id: 'minimalist',
-    name: 'Minimalist Odak',
+    name: { tr: 'Minimalist Odak', en: 'Minimalist Focus' },
     emoji: '◻️',
-    tagline: 'Daha azıyla, daha derini yakala.',
+    tagline: { tr: 'Daha azıyla, daha derini yakala.', en: 'Do less, go deeper.' },
     match: { priority: ['huzur'], energy: ['sabah', 'oglen'], stress: ['kalabalik', 'duzensizlik'], freetime: ['tuketmek', 'uretmek'],
       workstyle: ['planli', 'istikrarli'], social: ['yalniz'], motivation: ['anlam'], sleep: ['kaliteli', 'erken'], decision: ['mantik'], idealday: ['sakin', 'dengeli'] },
-    why: 'Kalabalık ve düzensizlik seni yoruyor, huzur en büyük önceliğin. Gündemini sadeleştirip gerçekten önemli olan birkaç şeye alan açmak, hem zihnini hem zamanını rahatlatır.',
+    why: {
+      tr: 'Kalabalık ve düzensizlik seni yoruyor, huzur en büyük önceliğin. Gündemini sadeleştirip gerçekten önemli olan birkaç şeye alan açmak, hem zihnini hem zamanını rahatlatır.',
+      en: 'Crowds and disorder wear you down, and peace is your top priority. Simplifying your agenda and making room for the few things that truly matter frees up both your mind and your time.',
+    },
     routine: {
-      Sabah: ['Güne tek bir net niyetle başla ("bugün önemli olan tek şey…")', 'Bildirimler kapalı, sade bir kahvaltı', 'Gün için en fazla 3 öncelik belirle'],
-      Öğle: ['Tek seferde tek iş — çoklu görevden kaçın', 'Masanı ve dijital alanını sade tut', 'Gereksiz toplantı/etkileşimleri nazikçe azalt'],
-      Akşam: ['Günün fazlalıklarını (eşya, görev, mesaj) tasfiye et', 'Sessiz bir aktivite: okuma, yürüyüş, günlük tutma', 'Yarının 3 önceliğini önceden yaz'],
+      sabah: {
+        tr: ['Güne tek bir net niyetle başla ("bugün önemli olan tek şey…")', 'Bildirimler kapalı, sade bir kahvaltı', 'Gün için en fazla 3 öncelik belirle'],
+        en: ['Start the day with one clear intention ("the one thing that matters today is…")', 'Notifications off, a simple breakfast', 'Set no more than 3 priorities for the day'],
+      },
+      ogle: {
+        tr: ['Tek seferde tek iş — çoklu görevden kaçın', 'Masanı ve dijital alanını sade tut', 'Gereksiz toplantı/etkileşimleri nazikçe azalt'],
+        en: ['One task at a time — avoid multitasking', 'Keep your desk and digital space uncluttered', 'Gently cut back on unnecessary meetings and interactions'],
+      },
+      aksam: {
+        tr: ['Günün fazlalıklarını (eşya, görev, mesaj) tasfiye et', 'Sessiz bir aktivite: okuma, yürüyüş, günlük tutma', 'Yarının 3 önceliğini önceden yaz'],
+        en: ['Clear out the day’s excess — belongings, tasks, messages', 'A quiet activity: reading, walking, journaling', 'Write down tomorrow’s 3 priorities in advance'],
+      },
     },
     models: [
-      { name: 'Steve Jobs', role: 'Apple kurucu ortağı', detail: 'Aynı kıyafeti giyerek bile gündelik kararları azaltıp zihnini asıl işine ayırdığını anlatırdı.' },
-      { name: 'Naval Ravikant', role: 'Yatırımcı, yazar', detail: 'Sadelik ve "daha az ama derin" felsefesini hem iş hayatına hem kişisel yaşamına taşımasıyla tanınır.' },
-      { name: 'Marie Kondo', role: 'Yazar, düzen uzmanı', detail: 'Fiziksel ve zihinsel sadeleşmenin huzuru doğrudan artırdığını dünyaya öğretti.' },
+      { name: { tr: 'Steve Jobs', en: 'Steve Jobs' }, role: { tr: 'Apple kurucu ortağı', en: 'Apple co-founder' }, detail: { tr: 'Aynı kıyafeti giyerek bile gündelik kararları azaltıp zihnini asıl işine ayırdığını anlatırdı.', en: 'He’d explain that even wearing the same outfit every day cut down on daily decisions, freeing his mind for the work that mattered.' } },
+      { name: { tr: 'Naval Ravikant', en: 'Naval Ravikant' }, role: { tr: 'Yatırımcı, yazar', en: 'Investor, writer' }, detail: { tr: 'Sadelik ve "daha az ama derin" felsefesini hem iş hayatına hem kişisel yaşamına taşımasıyla tanınır.', en: 'He’s known for carrying a philosophy of simplicity — "less but deeper" — into both his work and his personal life.' } },
+      { name: { tr: 'Marie Kondo', en: 'Marie Kondo' }, role: { tr: 'Yazar, düzen uzmanı', en: 'Author, organizing expert' }, detail: { tr: 'Fiziksel ve zihinsel sadeleşmenin huzuru doğrudan artırdığını dünyaya öğretti.', en: 'She taught the world that physical and mental decluttering directly increases peace of mind.' } },
     ],
   },
   {
     id: 'savasci',
-    name: 'Savaşçı Disiplini',
+    name: { tr: 'Savaşçı Disiplini', en: 'Warrior Discipline' },
     emoji: '⚔️',
-    tagline: 'Disiplin, motivasyonun bittiği yerde başlar.',
+    tagline: { tr: 'Disiplin, motivasyonun bittiği yerde başlar.', en: 'Discipline begins where motivation runs out.' },
     match: { priority: ['basari', 'saglik'], energy: ['sabah'], stress: ['zaman', 'fiziksel'], freetime: ['hareket'],
       workstyle: ['planli', 'sprint'], social: ['kucuk', 'yalniz'], motivation: ['rekabet'], sleep: ['erken'], decision: ['mantik', 'deneyim'], idealday: ['yogun'] },
-    why: 'Başarı ve sağlık senin için öncelikli, sabahları güçlüsün ve harekete geçmeyi seviyorsun. Net, disiplinli ve fiziksel olarak zorlayıcı bir rutin seni en iyi versiyonuna taşır.',
+    why: {
+      tr: 'Başarı ve sağlık senin için öncelikli, sabahları güçlüsün ve harekete geçmeyi seviyorsun. Net, disiplinli ve fiziksel olarak zorlayıcı bir rutin seni en iyi versiyonuna taşır.',
+      en: 'Achievement and health are your priorities, mornings are your strong suit, and you love taking action. A clear, disciplined, physically demanding routine brings out your best version.',
+    },
     routine: {
-      Sabah: ['Sabit ve erken bir kalkış saati (hafta sonu dahil)', 'Yoğun bir antrenman veya soğuk duş ile bedeni uyandır', 'Günün 1 numaralı hedefini yüksek sesle veya yazılı belirle'],
-      Öğle: ['En zor işi enerji tepe noktasında bitir', 'Kısa, verimli öğünler — uzun molalardan kaçın', 'Planlanmamış zamana izin verme, blokla çalış'],
-      Akşam: ['Hafif hareket (yürüyüş/germe) ile bedeni sakinleştir', 'Günü değerlendir: ne işe yaradı, ne yaramadı', 'Erken ve sabit bir uyku saati disiplinini koru'],
+      sabah: {
+        tr: ['Sabit ve erken bir kalkış saati (hafta sonu dahil)', 'Yoğun bir antrenman veya soğuk duş ile bedeni uyandır', 'Günün 1 numaralı hedefini yüksek sesle veya yazılı belirle'],
+        en: ['A fixed, early wake-up time (weekends included)', 'Wake your body with an intense workout or a cold shower', 'State your #1 goal for the day out loud or in writing'],
+      },
+      ogle: {
+        tr: ['En zor işi enerji tepe noktasında bitir', 'Kısa, verimli öğünler — uzun molalardan kaçın', 'Planlanmamış zamana izin verme, blokla çalış'],
+        en: ['Finish the hardest task while your energy peaks', 'Short, efficient meals — avoid long breaks', 'Don’t leave time unplanned — work in blocks'],
+      },
+      aksam: {
+        tr: ['Hafif hareket (yürüyüş/germe) ile bedeni sakinleştir', 'Günü değerlendir: ne işe yaradı, ne yaramadı', 'Erken ve sabit bir uyku saati disiplinini koru'],
+        en: ['Wind your body down with light movement — a walk or stretching', 'Review the day: what worked, what didn’t', 'Keep a disciplined, early, fixed bedtime'],
+      },
     },
     models: [
-      { name: 'Kobe Bryant', role: 'Basketbolcu', detail: '"Mamba Mentality" felsefesiyle sabah 4\'te başlayan antrenmanları kariyerinin efsanesi haline geldi.' },
-      { name: 'Tim Cook', role: 'Apple CEO\'su', detail: 'Sabah 04:00 civarında uyanıp spor yaparak güne disiplinli bir başlangıç yapmasıyla bilinir.' },
-      { name: 'David Goggins', role: 'Ultra maratoncu, yazar', detail: 'Zihinsel dayanıklılığı fiziksel disiplinle inşa etme felsefesini milyonlara ilham vererek anlattı.' },
+      { name: { tr: 'Kobe Bryant', en: 'Kobe Bryant' }, role: { tr: 'Basketbolcu', en: 'Basketball player' }, detail: { tr: '"Mamba Mentality" felsefesiyle sabah 4’te başlayan antrenmanları kariyerinin efsanesi haline geldi.', en: 'His "Mamba Mentality" philosophy and 4 AM training sessions became the stuff of legend in his career.' } },
+      { name: { tr: 'Tim Cook', en: 'Tim Cook' }, role: { tr: 'Apple CEO’su', en: 'Apple CEO' }, detail: { tr: 'Sabah 04:00 civarında uyanıp spor yaparak güne disiplinli bir başlangıç yapmasıyla bilinir.', en: 'He’s known for waking around 4 AM and exercising, giving his day a disciplined start.' } },
+      { name: { tr: 'David Goggins', en: 'David Goggins' }, role: { tr: 'Ultra maratoncu, yazar', en: 'Ultramarathoner, author' }, detail: { tr: 'Zihinsel dayanıklılığı fiziksel disiplinle inşa etme felsefesini milyonlara ilham vererek anlattı.', en: 'He built a philosophy of forging mental toughness through physical discipline, inspiring millions along the way.' } },
     ],
   },
   {
     id: 'maceraci',
-    name: 'Maceracı Ruh',
+    name: { tr: 'Maceracı Ruh', en: 'Adventurous Spirit' },
     emoji: '🧭',
-    tagline: 'Konfor alanı, senin için bir durak, varış değil.',
+    tagline: { tr: 'Konfor alanı, senin için bir durak, varış değil.', en: 'For you, comfort zones are a stop, not a destination.' },
     match: { priority: ['macera'], energy: ['aksam', 'oglen'], stress: ['monotonluk'], freetime: ['hareket'],
       workstyle: ['esnek'], social: ['degisken', 'kalabalik'], motivation: ['yenilik'], sleep: ['duzensiz', 'gec'], decision: ['sezgi'], idealday: ['maceral'] },
-    why: 'Macera en büyük önceliğin ve monotonluk seni en çok yoran şey. Yaşamını tekrar eden bir rutine değil, keşfe ve harekete açık bir yapıya oturtmak seni canlı tutar.',
+    why: {
+      tr: 'Macera en büyük önceliğin ve monotonluk seni en çok yoran şey. Yaşamını tekrar eden bir rutine değil, keşfe ve harekete açık bir yapıya oturtmak seni canlı tutar.',
+      en: 'Adventure is your top priority and monotony wears you out fastest. Building your life around openness to discovery and movement — not a repetitive routine — keeps you feeling alive.',
+    },
     routine: {
-      Sabah: ['Esnek bir kalkış — güne katı bir plan dayatma', 'Kısa bir açık hava molası (balkon, bahçe, sokak)', 'Haftalık "yeni bir şey" hedefini gözden geçir'],
-      Öğle: ['Rutin işleri toparla, ama tek bir şablona bağlı kalma', 'Farklı bir ortamda çalış/molanı ver (kafe, park, yeni rota)', 'Fiziksel harekete zaman ayır: yürüyüş, bisiklet, spor'],
-      Akşam: ['Haftada en az bir kez alışılmadık bir aktivite planla', 'Yeni insanlarla / yeni yerlerle tanışmaya açık kal', 'Günü, öğrendiğin bir şeyi not ederek kapat'],
+      sabah: {
+        tr: ['Esnek bir kalkış — güne katı bir plan dayatma', 'Kısa bir açık hava molası (balkon, bahçe, sokak)', 'Haftalık "yeni bir şey" hedefini gözden geçir'],
+        en: ['A flexible wake-up — don’t force a rigid plan on the day', 'A short outdoor break — balcony, garden, street', 'Check in on your weekly "try something new" goal'],
+      },
+      ogle: {
+        tr: ['Rutin işleri toparla, ama tek bir şablona bağlı kalma', 'Farklı bir ortamda çalış/molanı ver (kafe, park, yeni rota)', 'Fiziksel harekete zaman ayır: yürüyüş, bisiklet, spor'],
+        en: ['Handle routine tasks, but don’t lock into one template', 'Work or take your break somewhere different — a café, a park, a new route', 'Make time for physical movement: walking, cycling, sport'],
+      },
+      aksam: {
+        tr: ['Haftada en az bir kez alışılmadık bir aktivite planla', 'Yeni insanlarla / yeni yerlerle tanışmaya açık kal', 'Günü, öğrendiğin bir şeyi not ederek kapat'],
+        en: ['Plan at least one unusual activity a week', 'Stay open to meeting new people and new places', 'Close the day by noting something you learned'],
+      },
     },
     models: [
-      { name: 'Richard Branson', role: 'Girişimci', detail: 'Kitesurften uzay girişimciliğine, riski ve keşfi iş felsefesinin merkezine koydu.' },
-      { name: 'Alex Honnold', role: 'Dağcı', detail: 'Free solo tırmanışlarıyla konfor alanının çok ötesinde bir yaşamı gündelik pratiğe dönüştürdü.' },
-      { name: 'Yvon Chouinard', role: 'Patagonia kurucusu', detail: 'Doğaya ve maceraya olan tutkusunu doğrudan iş modeline dönüştürerek yaşadı.' },
+      { name: { tr: 'Richard Branson', en: 'Richard Branson' }, role: { tr: 'Girişimci', en: 'Entrepreneur' }, detail: { tr: 'Kitesurften uzay girişimciliğine, riski ve keşfi iş felsefesinin merkezine koydu.', en: 'From kitesurfing to space entrepreneurship, he put risk and discovery at the center of his business philosophy.' } },
+      { name: { tr: 'Alex Honnold', en: 'Alex Honnold' }, role: { tr: 'Dağcı', en: 'Rock climber' }, detail: { tr: 'Free solo tırmanışlarıyla konfor alanının çok ötesinde bir yaşamı gündelik pratiğe dönüştürdü.', en: 'Through free solo climbing, he turned a life far beyond the comfort zone into daily practice.' } },
+      { name: { tr: 'Yvon Chouinard', en: 'Yvon Chouinard' }, role: { tr: 'Patagonia kurucusu', en: 'Founder of Patagonia' }, detail: { tr: 'Doğaya ve maceraya olan tutkusunu doğrudan iş modeline dönüştürerek yaşadı.', en: 'He built his life by turning a passion for nature and adventure directly into a business model.' } },
     ],
   },
   {
     id: 'sefkatli',
-    name: 'Şefkatli Denge',
+    name: { tr: 'Şefkatli Denge', en: 'Compassionate Balance' },
     emoji: '🌿',
-    tagline: 'Kendine ve çevrene nazik bir ritim.',
+    tagline: { tr: 'Kendine ve çevrene nazik bir ritim.', en: 'A gentle rhythm, for yourself and those around you.' },
     match: { priority: ['huzur', 'saglik'], energy: ['oglen', 'aksam'], stress: ['kalabalik'], freetime: ['tuketmek'],
       workstyle: ['istikrarli'], social: ['kucuk'], motivation: ['katki', 'anlam'], sleep: ['kaliteli', 'duzensiz'], decision: ['baskalari', 'sezgi'], idealday: ['dengeli', 'sakin'] },
-    why: 'Huzur ve sağlık öncelikli, sosyal yoğunluk seni yoruyor. Kendine şefkat gösteren, dinlenmeye yer açan ve dengeyi zorlamadan kuran bir yaşam tarzı seninle en iyi örtüşüyor.',
+    why: {
+      tr: 'Huzur ve sağlık öncelikli, sosyal yoğunluk seni yoruyor. Kendine şefkat gösteren, dinlenmeye yer açan ve dengeyi zorlamadan kuran bir yaşam tarzı seninle en iyi örtüşüyor.',
+      en: 'Peace and health come first, and social overload wears you down. A lifestyle that treats you gently, makes room for rest, and builds balance without forcing it suits you best.',
+    },
     routine: {
-      Sabah: ['Aceleye getirmeden, yavaş bir başlangıç', 'Su iç, birkaç dakika hareket et, güne yumuşak gir', 'Gün için 1-2 makul, esnek hedef belirle'],
-      Öğle: ['Sosyal etkileşimleri küçük ve seçici tut', 'Kısa molalarla enerjini koru, kendini zorlama', 'Sakin bir ortamda, tek başına yemek arası'],
-      Akşam: ['Dinlendirici bir aktivite: izlemek, okumak, sıcak duş', 'Kendine 1 nazik cümle söyle (öz-şefkat pratiği)', 'Ekranları erken kapatıp bedenini dinlendir'],
+      sabah: {
+        tr: ['Aceleye getirmeden, yavaş bir başlangıç', 'Su iç, birkaç dakika hareket et, güne yumuşak gir', 'Gün için 1-2 makul, esnek hedef belirle'],
+        en: ['A slow start, no rushing', 'Drink water, move for a few minutes, ease into the day', 'Set 1–2 reasonable, flexible goals for the day'],
+      },
+      ogle: {
+        tr: ['Sosyal etkileşimleri küçük ve seçici tut', 'Kısa molalarla enerjini koru, kendini zorlama', 'Sakin bir ortamda, tek başına yemek arası'],
+        en: ['Keep social interactions small and selective', 'Protect your energy with short breaks — don’t push yourself', 'A lunch break alone, somewhere quiet'],
+      },
+      aksam: {
+        tr: ['Dinlendirici bir aktivite: izlemek, okumak, sıcak duş', 'Kendine 1 nazik cümle söyle (öz-şefkat pratiği)', 'Ekranları erken kapatıp bedenini dinlendir'],
+        en: ['A restful activity — watching, reading, a warm shower', 'Say one kind sentence to yourself (a self-compassion practice)', 'Switch off screens early and let your body rest'],
+      },
     },
     models: [
-      { name: 'Michelle Obama', role: 'Yazar, eski First Lady', detail: 'Sağlığı ve kendine bakımı, toplumsal sorumluluklarla birlikte yürütülebilecek bir denge olarak savunur.' },
-      { name: 'Oprah Winfrey', role: 'Medya yapımcısı', detail: 'Minnettarlık günlüğü ve öz-şefkat pratiklerini onlarca yıldır kamuoyuyla paylaşıyor.' },
-      { name: '14. Dalai Lama', role: 'Manevi lider', detail: 'Şefkati hem kendine hem başkalarına yönelik günlük bir pratik olarak öğretisinin merkezine koyar.' },
+      { name: { tr: 'Michelle Obama', en: 'Michelle Obama' }, role: { tr: 'Yazar, eski First Lady', en: 'Author, former First Lady' }, detail: { tr: 'Sağlığı ve kendine bakımı, toplumsal sorumluluklarla birlikte yürütülebilecek bir denge olarak savunur.', en: 'She advocates for health and self-care as a balance that can run alongside public responsibility.' } },
+      { name: { tr: 'Oprah Winfrey', en: 'Oprah Winfrey' }, role: { tr: 'Medya yapımcısı', en: 'Media producer' }, detail: { tr: 'Minnettarlık günlüğü ve öz-şefkat pratiklerini onlarca yıldır kamuoyuyla paylaşıyor.', en: 'She has shared gratitude journaling and self-compassion practices publicly for decades.' } },
+      { name: { tr: '14. Dalai Lama', en: 'The 14th Dalai Lama' }, role: { tr: 'Manevi lider', en: 'Spiritual leader' }, detail: { tr: 'Şefkati hem kendine hem başkalarına yönelik günlük bir pratik olarak öğretisinin merkezine koyar.', en: 'He places compassion — toward oneself and others — at the center of his teaching as a daily practice.' } },
     ],
   },
   {
     id: 'yaratici',
-    name: 'Yaratıcı Akış',
+    name: { tr: 'Yaratıcı Akış', en: 'Creative Flow' },
     emoji: '🎨',
-    tagline: 'İlham bekleme, ona giden yolu inşa et.',
+    tagline: { tr: 'İlham bekleme, ona giden yolu inşa et.', en: 'Don’t wait for inspiration — build the road to it.' },
     match: { priority: ['basari', 'macera'], energy: ['gece', 'aksam'], stress: ['monotonluk', 'duzensizlik'], freetime: ['uretmek'],
       workstyle: ['esnek', 'sprint'], social: ['degisken', 'yalniz'], motivation: ['yenilik'], sleep: ['gec', 'duzensiz'], decision: ['sezgi'], idealday: ['yogun', 'maceral'] },
-    why: 'Üretmekten güç alıyorsun, monotonluk seni bunaltıyor ve enerjin günün geç saatlerine doğru yükseliyor. Katı bir programdan çok, seni akışa sokan esnek ama disiplinli bir yaratım ritmi sana en çok fayda sağlar.',
+    why: {
+      tr: 'Üretmekten güç alıyorsun, monotonluk seni bunaltıyor ve enerjin günün geç saatlerine doğru yükseliyor. Katı bir programdan çok, seni akışa sokan esnek ama disiplinli bir yaratım ritmi sana en çok fayda sağlar.',
+      en: 'You draw strength from creating, monotony overwhelms you, and your energy rises later in the day. Rather than a rigid schedule, a flexible but disciplined creative rhythm that gets you into flow serves you best.',
+    },
     routine: {
-      Sabah: ['İlham toplama zamanı: okuma, gezinme, gözlem', 'Zihni işgal etmeyen basit işleri sabaha ayır', 'Günün "yaratım penceresini" netleştir'],
-      Öğle: ['Küçük deneyler ve taslaklar için zaman ayır', 'Rutin/idari işleri bu dilime sıkıştır', 'Kısa bir mola ile zihnini dinlendir'],
-      Akşam: ['Asıl yaratıcı işini en yüksek enerjinle yap', 'Dış müdahaleleri (bildirim, mesaj) kapat', 'Günü, yarına bırakılan bir fikirle bitir'],
+      sabah: {
+        tr: ['İlham toplama zamanı: okuma, gezinme, gözlem', 'Zihni işgal etmeyen basit işleri sabaha ayır', 'Günün "yaratım penceresini" netleştir'],
+        en: ['Gather inspiration: read, wander, observe', 'Save low-effort tasks for the morning, ones that don’t occupy your mind', 'Define today’s "creative window"'],
+      },
+      ogle: {
+        tr: ['Küçük deneyler ve taslaklar için zaman ayır', 'Rutin/idari işleri bu dilime sıkıştır', 'Kısa bir mola ile zihnini dinlendir'],
+        en: ['Set aside time for small experiments and drafts', 'Squeeze routine/admin work into this slot', 'Rest your mind with a short break'],
+      },
+      aksam: {
+        tr: ['Asıl yaratıcı işini en yüksek enerjinle yap', 'Dış müdahaleleri (bildirim, mesaj) kapat', 'Günü, yarına bırakılan bir fikirle bitir'],
+        en: ['Do your real creative work at your highest energy', 'Shut out interruptions — notifications, messages', 'End the day with an idea left for tomorrow'],
+      },
     },
     models: [
-      { name: 'Haruki Murakami', role: 'Yazar', detail: 'Sıkı bir disiplinle sabah yazar, koşar ve yaratıcı enerjisini fiziksel rutinle besler.' },
-      { name: 'Pablo Picasso', role: 'Ressam', detail: 'Gece saatlerinde çalışmayı tercih ederek en üretken dönemlerini bu ritme borçlu olduğunu söylerdi.' },
-      { name: 'Beyoncé', role: 'Sanatçı', detail: 'Yaratıcı süreçlerinde uzun, yoğun ve disiplinli prova/çalışma bloklarıyla tanınır.' },
+      { name: { tr: 'Haruki Murakami', en: 'Haruki Murakami' }, role: { tr: 'Yazar', en: 'Author' }, detail: { tr: 'Sıkı bir disiplinle sabah yazar, koşar ve yaratıcı enerjisini fiziksel rutinle besler.', en: 'He writes in the morning with strict discipline, runs, and fuels his creative energy through physical routine.' } },
+      { name: { tr: 'Pablo Picasso', en: 'Pablo Picasso' }, role: { tr: 'Ressam', en: 'Painter' }, detail: { tr: 'Gece saatlerinde çalışmayı tercih ederek en üretken dönemlerini bu ritme borçlu olduğunu söylerdi.', en: 'He preferred working at night and said he owed his most productive periods to that rhythm.' } },
+      { name: { tr: 'Beyoncé', en: 'Beyoncé' }, role: { tr: 'Sanatçı', en: 'Artist' }, detail: { tr: 'Yaratıcı süreçlerinde uzun, yoğun ve disiplinli prova/çalışma bloklarıyla tanınır.', en: 'She’s known for long, intense, disciplined rehearsal and work blocks in her creative process.' } },
     ],
   },
   {
     id: 'sakinguc',
-    name: 'Sakin Güç',
+    name: { tr: 'Sakin Güç', en: 'Calm Strength' },
     emoji: '🏔️',
-    tagline: 'Güç, gösterişte değil süreklilikte.',
+    tagline: { tr: 'Güç, gösterişte değil süreklilikte.', en: 'Strength lives in consistency, not in showing off.' },
     match: { priority: ['saglik'], energy: ['sabah', 'oglen'], stress: ['fiziksel'], freetime: ['hareket', 'tuketmek'],
       workstyle: ['istikrarli'], social: ['kucuk', 'yalniz'], motivation: ['anlam', 'katki'], sleep: ['erken', 'kaliteli'], decision: ['deneyim', 'mantik'], idealday: ['dengeli'] },
-    why: 'Sağlık en büyük önceliğin ve fiziksel yorgunluk seni en çok zorlayan şey. Aşırıya kaçmadan, sürdürülebilir ve bedenini önceleyen istikrarlı bir ritim sana en çok değer katar.',
+    why: {
+      tr: 'Sağlık en büyük önceliğin ve fiziksel yorgunluk seni en çok zorlayan şey. Aşırıya kaçmadan, sürdürülebilir ve bedenini önceleyen istikrarlı bir ritim sana en çok değer katar.',
+      en: 'Health is your top priority and physical fatigue is what challenges you most. A steady, sustainable rhythm that puts your body first, without ever going to extremes, adds the most value to your life.',
+    },
     routine: {
-      Sabah: ['Yeterli uykudan sonra sakin bir uyanış', 'Hafif germe veya kısa bir yürüyüş', 'Dengeli, doyurucu bir kahvaltı'],
-      Öğle: ['Uzun oturuşlara ara veren kısa hareket molaları', 'Bol su, düzenli ve sade öğünler', 'Enerji düştüğünde zorlamadan kısa bir mola'],
-      Akşam: ['Orta tempolu bir egzersiz (yürüyüş, yüzme, yoga)', 'Ekranı erken bırakıp bedeni dinlendir', 'Sabit bir uyku saatiyle toparlanmaya öncelik ver'],
+      sabah: {
+        tr: ['Yeterli uykudan sonra sakin bir uyanış', 'Hafif germe veya kısa bir yürüyüş', 'Dengeli, doyurucu bir kahvaltı'],
+        en: ['A calm wake-up after enough sleep', 'Light stretching or a short walk', 'A balanced, satisfying breakfast'],
+      },
+      ogle: {
+        tr: ['Uzun oturuşlara ara veren kısa hareket molaları', 'Bol su, düzenli ve sade öğünler', 'Enerji düştüğünde zorlamadan kısa bir mola'],
+        en: ['Short movement breaks that interrupt long sitting', 'Plenty of water, regular and simple meals', 'A short break when energy dips — without forcing it'],
+      },
+      aksam: {
+        tr: ['Orta tempolu bir egzersiz (yürüyüş, yüzme, yoga)', 'Ekranı erken bırakıp bedeni dinlendir', 'Sabit bir uyku saatiyle toparlanmaya öncelik ver'],
+        en: ['A moderate-paced exercise — walking, swimming, yoga', 'Put screens away early and let your body rest', 'Prioritize recovery with a consistent bedtime'],
+      },
     },
     models: [
-      { name: 'LeBron James', role: 'Basketbolcu', detail: 'Vücut bakımına yıllık büyük bir yatırım yaparak uzun ömürlü bir performansı sürdürülebilir kılıyor.' },
-      { name: 'Novak Djokovic', role: 'Tenisçi', detail: 'Beslenme, uyku ve toparlanmayı performansının temel taşı olarak görür.' },
-      { name: 'Arnold Schwarzenegger', role: 'Sporcu, oyuncu', detail: 'Onlarca yıldır süren istikrarlı bir sağlık ve antrenman disiplinini kamuoyuyla paylaşmaya devam ediyor.' },
+      { name: { tr: 'LeBron James', en: 'LeBron James' }, role: { tr: 'Basketbolcu', en: 'Basketball player' }, detail: { tr: 'Vücut bakımına yıllık büyük bir yatırım yaparak uzun ömürlü bir performansı sürdürülebilir kılıyor.', en: 'He invests heavily in body maintenance every year, making long-term performance sustainable.' } },
+      { name: { tr: 'Novak Djokovic', en: 'Novak Djokovic' }, role: { tr: 'Tenisçi', en: 'Tennis player' }, detail: { tr: 'Beslenme, uyku ve toparlanmayı performansının temel taşı olarak görür.', en: 'He treats nutrition, sleep, and recovery as the cornerstones of his performance.' } },
+      { name: { tr: 'Arnold Schwarzenegger', en: 'Arnold Schwarzenegger' }, role: { tr: 'Sporcu, oyuncu', en: 'Athlete, actor' }, detail: { tr: 'Onlarca yıldır süren istikrarlı bir sağlık ve antrenman disiplinini kamuoyuyla paylaşmaya devam ediyor.', en: 'He continues to share a health and training discipline he has kept up consistently for decades.' } },
     ],
   },
 ];
@@ -313,14 +462,13 @@ function showScreen(name) {
   screens[name].classList.add('active');
 }
 
-/* soruları oluştur */
+/* soruları oluştur (metinler applyQuestionTexts ile dolduruluyor) */
 QUESTIONS.forEach((q, qi) => {
   const wrap = document.createElement('div');
   wrap.className = 'question';
   wrap.dataset.index = qi;
 
   const h2 = document.createElement('h2');
-  h2.textContent = q.title;
   wrap.appendChild(h2);
 
   const opts = document.createElement('div');
@@ -331,13 +479,83 @@ QUESTIONS.forEach((q, qi) => {
     btn.type = 'button';
     btn.className = 'option';
     btn.dataset.value = opt.value;
-    btn.innerHTML = `<span class="option-emoji">${opt.emoji}</span><span class="option-label">${opt.label}</span>`;
+
+    const emojiSpan = document.createElement('span');
+    emojiSpan.className = 'option-emoji';
+    emojiSpan.textContent = opt.emoji;
+
+    const labelSpan = document.createElement('span');
+    labelSpan.className = 'option-label';
+
+    btn.appendChild(emojiSpan);
+    btn.appendChild(labelSpan);
     btn.addEventListener('click', () => selectOption(qi, q.key, opt.value, btn));
     opts.appendChild(btn);
   });
 
   wrap.appendChild(opts);
   questionsEl.appendChild(wrap);
+});
+
+function applyQuestionTexts() {
+  QUESTIONS.forEach((q, qi) => {
+    const wrap = questionsEl.querySelector(`.question[data-index="${qi}"]`);
+    wrap.querySelector('h2').textContent = q.title[LANG];
+    const buttons = wrap.querySelectorAll('.option');
+    q.options.forEach((opt, oi) => {
+      buttons[oi].querySelector('.option-label').textContent = opt.label[LANG];
+    });
+  });
+}
+
+function applyWelcomeTexts() {
+  document.getElementById('welcome-title').innerHTML = STRINGS[LANG].welcomeTitle;
+  document.getElementById('lead-text').textContent = STRINGS[LANG].lead;
+  document.getElementById('sub-text').textContent = STRINGS[LANG].sub;
+  document.getElementById('btn-start').innerHTML = `${STRINGS[LANG].start} <span class="arrow">→</span>`;
+}
+
+function applyResultChrome() {
+  document.getElementById('result-eyebrow').textContent = STRINGS[LANG].resultEyebrow;
+  document.getElementById('routine-title').textContent = STRINGS[LANG].routineTitle;
+  document.getElementById('models-title').textContent = STRINGS[LANG].modelsTitle;
+  document.getElementById('btn-restart').innerHTML = `↺ ${STRINGS[LANG].restart}`;
+}
+
+function updateQuizChrome() {
+  progressFill.style.width = `${((state.step + 1) / QUESTIONS.length) * 100}%`;
+  progressLabel.textContent = `${STRINGS[LANG].soru} ${state.step + 1} / ${QUESTIONS.length}`;
+  btnBack.textContent = `← ${STRINGS[LANG].back}`;
+  btnBack.style.visibility = state.step === 0 ? 'hidden' : 'visible';
+
+  const currentKey = QUESTIONS[state.step].key;
+  btnNext.disabled = !state.answers[currentKey];
+  if (state.step === QUESTIONS.length - 1) {
+    btnNext.innerHTML = `${STRINGS[LANG].seeResult} <span class="arrow">✦</span>`;
+  } else {
+    btnNext.innerHTML = `${STRINGS[LANG].next} <span class="arrow">→</span>`;
+  }
+}
+
+function setLanguage(lang) {
+  if (lang !== 'tr' && lang !== 'en') return;
+  LANG = lang;
+  try { localStorage.setItem('lifecraft-lang', lang); } catch (e) { /* ignore */ }
+  document.documentElement.lang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+
+  applyWelcomeTexts();
+  applyQuestionTexts();
+  updateQuizChrome();
+  applyResultChrome();
+
+  if (screens.result.classList.contains('active')) {
+    renderResult(pickArchetype(state.answers));
+  }
+}
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
 });
 
 function selectOption(qIndex, key, value, btnEl) {
@@ -361,18 +579,7 @@ function renderStep(direction = 'forward') {
   void current.offsetWidth; // reflow, so the entrance animation replays every time
   current.classList.add(direction === 'back' ? 'anim-left' : 'anim-right');
 
-  progressFill.style.width = `${((state.step + 1) / QUESTIONS.length) * 100}%`;
-  progressLabel.textContent = `Soru ${state.step + 1} / ${QUESTIONS.length}`;
-
-  btnBack.style.visibility = state.step === 0 ? 'hidden' : 'visible';
-
-  const currentKey = QUESTIONS[state.step].key;
-  btnNext.disabled = !state.answers[currentKey];
-  if (state.step === QUESTIONS.length - 1) {
-    btnNext.innerHTML = 'Sonucumu Gör <span class="arrow">✦</span>';
-  } else {
-    btnNext.innerHTML = 'Devam Et <span class="arrow">→</span>';
-  }
+  updateQuizChrome();
 }
 
 btnBack.addEventListener('click', () => {
@@ -403,23 +610,17 @@ document.getElementById('btn-restart').addEventListener('click', () => {
   showScreen('welcome');
 });
 
-const LOADING_MESSAGES = [
-  'Cevapların analiz ediliyor…',
-  'Enerji ritmin okunuyor…',
-  'Sana en yakın yaşam tarzı belirleniyor…',
-  'Rutinin şekilleniyor…',
-];
-
 function finishQuiz() {
   showScreen('loading');
   const loadingTextEl = document.getElementById('loading-text');
+  const messages = STRINGS[LANG].loadingMessages;
   let i = 0;
-  loadingTextEl.textContent = LOADING_MESSAGES[0];
+  loadingTextEl.textContent = messages[0];
   const cycle = setInterval(() => {
-    i = (i + 1) % LOADING_MESSAGES.length;
+    i = (i + 1) % messages.length;
     loadingTextEl.style.opacity = 0;
     setTimeout(() => {
-      loadingTextEl.textContent = LOADING_MESSAGES[i];
+      loadingTextEl.textContent = messages[i];
       loadingTextEl.style.opacity = 1;
     }, 200);
   }, 550);
@@ -432,19 +633,22 @@ function finishQuiz() {
   }, 1800);
 }
 
+const PERIOD_KEYS = ['sabah', 'ogle', 'aksam'];
+
 function renderResult(a) {
   document.getElementById('result-emoji').textContent = a.emoji;
-  document.getElementById('result-name').textContent = a.name;
-  document.getElementById('result-tagline').textContent = a.tagline;
-  document.getElementById('result-why').textContent = a.why;
+  document.getElementById('result-name').textContent = a.name[LANG];
+  document.getElementById('result-tagline').textContent = a.tagline[LANG];
+  document.getElementById('result-why').textContent = a.why[LANG];
 
   const routineGrid = document.getElementById('routine-grid');
   routineGrid.innerHTML = '';
-  Object.entries(a.routine).forEach(([period, items]) => {
+  PERIOD_KEYS.forEach(periodKey => {
+    const items = a.routine[periodKey][LANG];
     const block = document.createElement('div');
     block.className = 'routine-block';
     const h4 = document.createElement('h4');
-    h4.textContent = period;
+    h4.textContent = STRINGS[LANG].periods[periodKey];
     const ul = document.createElement('ul');
     items.forEach(item => {
       const li = document.createElement('li');
@@ -462,10 +666,21 @@ function renderResult(a) {
     const card = document.createElement('div');
     card.className = 'model-card';
     card.innerHTML = `
-      <div class="model-name">${m.name}</div>
-      <div class="model-role">${m.role}</div>
-      <div class="model-detail">${m.detail}</div>
+      <div class="model-name">${m.name[LANG]}</div>
+      <div class="model-role">${m.role[LANG]}</div>
+      <div class="model-detail">${m.detail[LANG]}</div>
     `;
     modelsGrid.appendChild(card);
   });
+
+  applyResultChrome();
 }
+
+/* ---------- ilk yükleme ---------- */
+
+document.documentElement.lang = LANG;
+document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === LANG));
+applyWelcomeTexts();
+applyQuestionTexts();
+updateQuizChrome();
+applyResultChrome();
